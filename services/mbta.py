@@ -8,7 +8,7 @@ from services import cache
 DATE_FORMAT = "%a, %d %b %Y %H:%M:%S %Z"
 
 ATTRIBUTE_TAG = 'attributes'
-
+INCLUDED_TAG = 'included'
 
 class MbtaService:
 
@@ -51,22 +51,23 @@ class MbtaService:
         try:
             json_obj = self._request(conn, path)
 
-            maps = {'vehicle': {}, 'trip': {}, 'route': {}, 'schedule': {}, 'stop': {}}
-            for inc in json_obj['included']:
-                obj_type = inc['type']
-                obj_id = inc['id']
-                if obj_type in maps:
-                    obj_map = maps[obj_type]
-                    obj_map[obj_id] = inc[ATTRIBUTE_TAG]
-            for p in json_obj['data']:
-                for r_name, r_content in p['relationships'].items():
-                    if r_name in maps:
-                        obj_map = maps[r_name]
-                        r_data = r_content['data']
-                        if r_data is None:
-                            continue
-                        obj_id = r_data['id']
-                        r_data[ATTRIBUTE_TAG] = obj_map[obj_id]
+            if INCLUDED_TAG in json_obj:
+                maps = {'vehicle': {}, 'trip': {}, 'route': {}, 'schedule': {}, 'stop': {}}
+                for inc in json_obj['included']:
+                    obj_type = inc['type']
+                    obj_id = inc['id']
+                    if obj_type in maps:
+                        obj_map = maps[obj_type]
+                        obj_map[obj_id] = inc[ATTRIBUTE_TAG]
+                for p in json_obj['data']:
+                    for r_name, r_content in p['relationships'].items():
+                        if r_name in maps:
+                            obj_map = maps[r_name]
+                            r_data = r_content['data']
+                            if r_data is None:
+                                continue
+                            obj_id = r_data['id']
+                            r_data[ATTRIBUTE_TAG] = obj_map[obj_id]
         finally:
             conn.close()
         return json_obj
