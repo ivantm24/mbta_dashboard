@@ -1,0 +1,56 @@
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+<html>
+<head>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-8">
+                <h1 class="text-center">{{station_name}}</h1>
+            </div>
+            <div class="col-2"></div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-8">
+                <table class="table">
+                  <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">carrier</th>
+                        <th scope="col">time</th>
+                        <th scope="col">destination</th>
+                        <th scope="col">train</th>
+                        <th scope="col">track</th>
+                        <th scope="col">status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for stop in object_list %}
+                    <tr>
+                      <td>{{stop.carrier}}</td>
+                      <td>{{stop.time}}</td>
+                      <td>{{stop.destination}}</td>
+                      <td>{{stop.train}}</td>
+                      <td>{{stop.track}}</td>
+                      <td>{{stop.status}}</td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+            <div class="col-2"></div>
+        </div>
+    </div>
+</body>
+</html>
+

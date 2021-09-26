@@ -10,6 +10,10 @@
 
 <html>
 <head>
+        <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <style>
+    [data-href] { cursor: pointer; }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -42,13 +46,11 @@
                   </thead>
                   <tbody>
                   {% for stop in object_list %}
-                  <a href="">
-                    <tr>
+                    <tr class='clickable-row' data-href="{% url 'station-board' stop.id %}">
                       <th scope="row">{{stop.id}}</th>
                       <td>{{stop.name}}</td>
                       <td>{{stop.description}}</td>
                     </tr>
-                  </a>
                   {% endfor %}
                   </tbody>
                 </table>
@@ -56,6 +58,13 @@
             <div class="col-2"></div>
         </div>
     </div>
+<script>
+    $(document).ready(function($) {
+        $(".clickable-row").click(function() {
+            window.location = $(this).data("href");
+        });
+    });
+</script>
 </body>
 </html>
 
