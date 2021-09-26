@@ -49,7 +49,7 @@
                     <tr class='clickable-row' data-href="{% url 'station-board' stop.id %}">
                       <th scope="row">{{stop.id}}</th>
                       <td>{{stop.name}}</td>
-                      <td>{{stop.description}}</td>
+                      <td>{% if stop.description %}{{stop.description}}{% endif %}</td>
                     </tr>
                   {% endfor %}
                   </tbody>
