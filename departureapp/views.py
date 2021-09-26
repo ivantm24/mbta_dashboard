@@ -1,7 +1,9 @@
 from django.conf import settings
+from django.db.models import Q
 from django.shortcuts import render
 
 from django.http import HttpResponse, JsonResponse
+from django.views.generic import ListView
 
 from departureapp.models import Stop
 from services.mbta import MbtaService
@@ -10,6 +12,28 @@ from services.mbta import MbtaService
 def index(request):
     context = {}
     return render(request, 'departureapp/index.html', context)
+
+
+class SearchStationView(ListView):
+    model = Stop
+    template_name = 'departureapp/search_stops.html'
+    ordering = ['name', 'description', 'id']
+
+    def get_context_data(self, *args, object_list=None, **kwargs):
+        data = super().get_context_data(*args, **kwargs)
+        query = self.request.GET.get('q')
+        if query is not None:
+            data['q'] = query
+        return data
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query is None:
+            return {}
+        object_list = Stop.objects.filter(
+            Q(name__icontains=query) | Q(description__icontains=query)
+        )
+        return object_list
 
 
 def reload_stations(request):
