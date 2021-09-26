@@ -66,8 +66,8 @@ def station_board(request, stop_id):
         if stop_data is not None:
             stop_attr = stop_data['attributes']
             display_track = stop_attr['platform_code']
-        if display_track is None:
-            display_track = stop_attr['platform_name']
+            if display_track is None:
+                display_track = stop_attr['platform_name']
         if display_track is None:
             display_track = EMPTY
 
