@@ -102,8 +102,8 @@ class SearchStationView(ListView):
         query = self.request.GET.get('q')
         if query is None:
             return {}
-        object_list = Stop.objects.filter(
-            Q(name__icontains=query) | Q(description__icontains=query)
+        object_list = Stop.objects.filter(parent_stop=None).filter(
+            Q(name__icontains=query) | Q(description__icontains=query) | Q(id__icontains=query)
         )
         return object_list
 
